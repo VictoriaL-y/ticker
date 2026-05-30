@@ -17,7 +17,7 @@ body {
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: system-ui, -apple-system, sans-serif; /* Inter wired in via next/font in B4 */
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
