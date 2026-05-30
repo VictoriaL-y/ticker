@@ -1,0 +1,23 @@
+:root {
+  color-scheme: light;
+  --bg: #f6f7f9;
+  --fg: #1c1d22;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: system-ui, -apple-system, sans-serif; /* Inter wired in via next/font in B4 */
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
