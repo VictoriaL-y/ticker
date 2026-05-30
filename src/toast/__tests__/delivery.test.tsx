@@ -31,7 +31,10 @@ describe("toast delivery on increment", () => {
 
     await user.click(screen.getByRole("button", { name: "+1" }));
 
-    expect(await screen.findByText(/counter is now 1/i)).toBeInTheDocument();
+    // The count sits in its own <span> (so it can flourish on change), which
+    // splits the line across elements — assert on the subtitle's full text.
+    const subtitle = await screen.findByText(/counter is now/i);
+    expect(subtitle).toHaveTextContent("Counter is now 1");
   });
 
   it("does not toast on the initial render, even under StrictMode", () => {

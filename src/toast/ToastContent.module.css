@@ -92,3 +92,34 @@
   /* Digits stay put as the number changes — no horizontal jitter. */
   font-variant-numeric: tabular-nums;
 }
+
+/* The count is its own element so it can animate on change without nudging the
+   surrounding text. inline-block lets the transform apply; tabular-nums keeps
+   its width stable so the line doesn't reflow as digits change. */
+.value {
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+}
+
+/* A brief rise-and-fade as the new number arrives — restrained, not a digit
+   roll. Re-mounting the span (keyed on count) replays this on every change. */
+.flourish {
+  animation: count-flourish 220ms cubic-bezier(0.21, 1.02, 0.73, 1) both;
+}
+
+@keyframes count-flourish {
+  from {
+    opacity: 0;
+    transform: translateY(0.4em);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flourish {
+    animation: none;
+  }
+}
