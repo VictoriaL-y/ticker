@@ -6,7 +6,7 @@
 
 <!-- live URL: pending Netlify deploy — tracked in #8 -->
 
-> **Live demo:** _pending deploy ([#8](https://github.com/VictoriaL-y/ticker/issues/8))._
+> [**Live demo:**](https://ticker-yendou.netlify.app/)
 
 ![ticker — the counter and the toast it fires on every increment](docs/hero.png)
 
