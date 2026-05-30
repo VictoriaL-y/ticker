@@ -1,0 +1,94 @@
+/*
+ * The toast card. Two details most implementations get wrong, both handled here:
+ *
+ * 1. The rounded gradient border. `border-image` does NOT respect
+ *    `border-radius`, so the naive Figma export gives square corners on a
+ *    rounded card. The fix is a `::before` overlay holding the gradient, with
+ *    `mask` + `mask-composite: exclude` punching out the interior so only a 1px
+ *    rounded hairline remains.
+ * 2. The surface is a green radial wash over a warm grey, not a flat fill, and
+ *    the depth is a five-layer shadow — a single shadow reads as flat.
+ */
+.toast {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  /* Roomier than the Figma 12/20/12/16 — the screenshot reads more generous,
+     and the icon hugs the left (slightly less left padding than right). */
+  padding: 18px 22px 18px 18px;
+  /* The screenshot card is wide: the text fills little more than half of it.
+     Clamp so it never overflows a phone narrower than the card + its margins. */
+  min-width: min(320px, calc(100vw - 2rem));
+  border-radius: 8px;
+  background:
+    radial-gradient(
+      53.57% 282.15% at 2.14% 50%,
+      rgba(116, 200, 152, 0.15) 0%,
+      rgba(116, 200, 152, 0.03) 100%
+    ),
+    #46474f;
+  box-shadow:
+    0 0 0 1px rgba(40, 41, 50, 0.04),
+    0 2px 2px -1px rgba(40, 41, 50, 0.04),
+    0 4px 4px -2px rgba(40, 41, 50, 0.04),
+    0 8px 8px -4px rgba(40, 41, 50, 0.06),
+    0 16px 32px rgba(40, 41, 50, 0.06);
+}
+
+.toast::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 1px;
+  border-radius: inherit;
+  pointer-events: none;
+  /* Layer order matters: the green radial sits ON TOP of the grey base (earlier
+     layers paint first), so its left-weighted alpha tints the hairline green at
+     the left and fades to grey on the right — matching the screenshot. With the
+     opaque grey on top instead, the border renders flat grey. */
+  background:
+    radial-gradient(
+      53.57% 282.15% at 2.14% 50%,
+      rgba(116, 200, 152, 0.65) 0%,
+      rgba(116, 200, 152, 0.1) 100%
+    ),
+    linear-gradient(0deg, #6f7076, #6f7076);
+  /* Safari needs the prefixed property and `xor`; the standard pair is below. */
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* The screenshot's hierarchy is carried by weight, not size: both lines are the
+   same size, the title bold and the subtitle regular and a touch dimmer. */
+.title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  color: #fff;
+}
+
+.subtitle {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  color: rgba(255, 255, 255, 0.92);
+  /* Digits stay put as the number changes — no horizontal jitter. */
+  font-variant-numeric: tabular-nums;
+}
