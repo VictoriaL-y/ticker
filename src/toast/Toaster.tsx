@@ -8,16 +8,24 @@ import {
   createToaster,
 } from "@chakra-ui/react";
 import { ToastContent } from "./ToastContent";
+import styles from "./Toaster.module.css";
 
 /**
  * The toast store — a module singleton so the count-driven hook
  * (`useCounterToast`) and the rendered `<Toaster />` share one queue.
  * `bottom-end` matches the screenshot's placement; `pauseOnPageIdle` keeps
  * the timer from burning down while the tab is in the background.
+ *
+ * `removeDelay` is how long a dismissing toast stays mounted (as
+ * `data-state="closed"`) before removal — the window the exit animation plays
+ * in. Bumped past the 200ms default for a slightly more graceful exit; the
+ * exit keyframe derives its duration from this same value (via the machine's
+ * `--remove-delay` var) so the two can't drift apart (see Toaster.module.css).
  */
 export const toaster = createToaster({
   placement: "bottom-end",
   pauseOnPageIdle: true,
+  removeDelay: 220,
 });
 
 /**
@@ -58,9 +66,10 @@ export function Toaster() {
       <ChakraToaster toaster={toaster}>
         {/* `unstyled` strips Chakra's default toast skin so ToastContent is the
             only card; Toast.Root stays the positioned, data-state-driven wrapper
-            the machine needs (animations hook onto it in a later PR). */}
+            the machine needs. The motion class animates enter/exit off that
+            data-state (see Toaster.module.css). */}
         {(toast) => (
-          <Toast.Root unstyled>
+          <Toast.Root unstyled className={styles.root}>
             <ToastContent count={readCount(toast.meta)} />
           </Toast.Root>
         )}
