@@ -3,7 +3,7 @@
 > A counter that earns its toast.
 >
 > The feature is deliberately small; the bar is not. This document records the
-> design decisions and *why* they were made. The step-by-step execution sequence
+> design decisions and _why_ they were made. The step-by-step execution sequence
 > lives in [PLAN.md](./PLAN.md).
 
 ## 1. Problem & framing
@@ -21,7 +21,8 @@ on a tiny core, not breadth.
 ## 2. Goals & non-goals
 
 **Goals**
-- A toast that is *pixel-faithful* to the screenshot, including the rounded
+
+- A toast that is _pixel-faithful_ to the screenshot, including the rounded
   gradient border most implementations get wrong.
 - Interaction that feels considered: motion that respects `prefers-reduced-motion`,
   keyboard parity, and a screen-reader announcement of the new count.
@@ -31,6 +32,7 @@ on a tiny core, not breadth.
 - `npm install && npm run dev` works on a clean checkout, first try.
 
 **Non-goals (chosen restraint — restraint is part of the grade)**
+
 - No decrement / reset / multi-counter. The brief asks for `+1`; extra buttons add
   surface, not delight.
 - No state-management library for a single integer. React context is the right size.
@@ -57,19 +59,19 @@ our design.
 ## 4. Architecture
 
 Six small units, each with one job and a clear interface. The boundary that matters
-most is between *what the toast looks like* and *how it is delivered* — they are
+most is between _what the toast looks like_ and _how it is delivered_ — they are
 different concerns with different failure modes, so they are different modules.
 
-| Unit | Responsibility | Depends on |
-|---|---|---|
-| `CounterProvider` / `CounterContext` | Own `{ count, increment }`. Context default is `undefined`. | React |
-| `useCounter()` | Read the context; **throw a typed, helpful error** if used outside the provider. | `CounterContext` |
-| `Counter` | Render the formatted count and the `+1` button. The only interactive element. | `useCounter`, `useCounterToast` |
-| `ToastContent` | **Pure presentational.** Given `{ count }`, render the pixel-perfect card. No Chakra, no toaster — so it is trivially Storybook-able and unit-testable. | CSS module, icon |
-| `Toaster` | Wire `createToaster` and render `ToastContent` per toast. | Chakra, `ToastContent` |
-| `useCounterToast()` | The single-updating-toast logic: stable id, create-or-update, timer reset, `aria-live`. | `Toaster` |
+| Unit                                 | Responsibility                                                                                                                                          | Depends on                      |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `CounterProvider` / `CounterContext` | Own `{ count, increment }`. Context default is `undefined`.                                                                                             | React                           |
+| `useCounter()`                       | Read the context; **throw a typed, helpful error** if used outside the provider.                                                                        | `CounterContext`                |
+| `Counter`                            | Render the formatted count and the `+1` button. The only interactive element.                                                                           | `useCounter`, `useCounterToast` |
+| `ToastContent`                       | **Pure presentational.** Given `{ count }`, render the pixel-perfect card. No Chakra, no toaster — so it is trivially Storybook-able and unit-testable. | CSS module, icon                |
+| `Toaster`                            | Wire `createToaster` and render `ToastContent` per toast.                                                                                               | Chakra, `ToastContent`          |
+| `useCounterToast()`                  | The single-updating-toast logic: stable id, create-or-update, timer reset, `aria-live`.                                                                 | `Toaster`                       |
 
-**Data flow.** Incrementing is *count-driven*: the toast reflects the latest count
+**Data flow.** Incrementing is _count-driven_: the toast reflects the latest count
 rather than being fired imperatively from one specific handler. This keeps it
 declarative and correct regardless of how the increment was triggered (mouse,
 `Enter`, or `Space`).
@@ -102,7 +104,7 @@ src/
 The screenshot is the source of truth; the Figma CSS is a starting point that
 "will not exactly match," so values are tuned by eye against the image.
 
-- **Rounded gradient border — the trap.** `border-image` does *not* respect
+- **Rounded gradient border — the trap.** `border-image` does _not_ respect
   `border-radius`, so the naïve Figma export gives square corners on a rounded card.
   The fix is a `::before` pseudo-element at `inset: 0` with `padding: 1px`,
   `border-radius: inherit`, the linear+radial gradient as its background, and
@@ -128,7 +130,7 @@ All motion is gated behind `prefers-reduced-motion`; the reduced path is an inst
 non-animated equivalent everywhere.
 
 - **Single updating toast.** Rapid clicks update one stable toast to the latest count
-  and reset its ~3.5s dismiss timer. It enter-animates *once*; subsequent clicks only
+  and reset its ~3.5s dismiss timer. It enter-animates _once_; subsequent clicks only
   update content. This is both more correct (the latest value supersedes the rest)
   and free of pile-up. The chosen behavior over a stack, justified.
 - **Enter / exit.** Slide-up + fade + a slight scale (~220ms), driven off Chakra's
@@ -177,7 +179,7 @@ Behavior over snapshots. Vitest + RTL + jsdom:
 - ESLint (Next + TS-strict) and Prettier, enforced pre-commit by husky + lint-staged
   so unformatted or failing code can't be committed.
 - **GitHub Actions CI:** typecheck → lint → format-check → test → `next build`. Set up
-  in the bootstrap so *every* feature PR runs green; a status badge sits in the README.
+  in the bootstrap so _every_ feature PR runs green; a status badge sits in the README.
 - A small **Storybook** story for `ToastContent` (count = 3, and a large number). It
   also enforces the presentational boundary — if the toast needs Chakra to render, the
   boundary is wrong.
