@@ -1,5 +1,7 @@
 # ticker Implementation Plan
 
+> **Status (as built).** This document is the _original_ plan and remains the record of the build sequence. What actually shipped to `main`: the bootstrap, **PR1–PR3** (counter + context + guarded hook, single updating toast, pixel-matched `ToastContent`), **PR4** (motion + `prefers-reduced-motion`), and **PR8** (this README). The remaining planned PRs were deliberately scoped out to small GitHub issues to keep each change reviewable: **#4** Storybook, **#5** accessibility (was PR5), **#6** edge cases (was PR6), **#7** milestone (was PR7), **#8** deploy (was PR9). Two pre-existing SSR/console issues found during verification are tracked as **#10**/**#11**. **The open GitHub issues are the source of truth for remaining work.**
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans (inline, with a human PR-review checkpoint at every PR boundary) to implement this plan. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** A pixel-faithful, accessible, animated `+1` counter with a Chakra-delivered custom toast — built to a "great, not pretty good" bar for Yendou's SWE take-home.
@@ -578,20 +580,20 @@ expect(screen.getByText(/counter is now 5/i)).toBeInTheDocument();
 
 ## Consolidated test list
 
-| #   | Test                                                              | File                                         |
-| --- | ----------------------------------------------------------------- | -------------------------------------------- |
-| 1   | `useCounter` throws outside provider                              | `counter/__tests__/use-counter.test.tsx`     |
-| 2   | provider: initial 0; increment → 1                                | `counter/__tests__/counter-context.test.tsx` |
-| 3   | Counter renders count; clicks accumulate                          | `counter/__tests__/Counter.test.tsx`         |
-| 4   | click → toast "Counter is now 1" + polite live region             | `toast/__tests__/delivery.test.tsx`          |
-| 5   | **spam: 5 clicks → exactly 1 toast, value 5**                     | `toast/__tests__/spam.test.tsx`              |
-| 6   | large number formatted with separators                            | `toast/__tests__/format.test.tsx`            |
-| 7   | `ToastContent` renders title/subtitle/icon/role                   | `toast/__tests__/content.test.tsx`           |
-| 8   | `usePrefersReducedMotion` reflects matchMedia                     | `lib/__tests__/reduced-motion.test.ts`       |
-| 9   | reduced-motion → animation not applied                            | `toast/__tests__/motion.test.tsx`            |
-| 10  | jest-axe: no violations (page + ToastContent)                     | `**/__tests__/a11y.test.tsx`                 |
-| 11  | keyboard: Tab focuses button, Enter increments                    | `counter/__tests__/keyboard.test.tsx`        |
-| 12  | milestone flag at multiples of 10, off otherwise + reduced-motion | `toast/__tests__/milestone.test.tsx`         |
+| #   | Test                                                              | File                                               |
+| --- | ----------------------------------------------------------------- | -------------------------------------------------- |
+| 1   | `useCounter` throws outside provider                              | `counter/__tests__/use-counter.test.tsx`           |
+| 2   | provider: initial 0; increment → 1                                | `counter/__tests__/counter-context.test.tsx`       |
+| 3   | Counter renders count; clicks accumulate                          | `counter/__tests__/Counter.test.tsx`               |
+| 4   | click → toast "Counter is now 1" + polite live region             | `toast/__tests__/delivery.test.tsx`                |
+| 5   | **spam: 5 clicks → exactly 1 toast, value 5**                     | `toast/__tests__/spam.test.tsx`                    |
+| 6   | large number formatted with separators                            | `toast/__tests__/format.test.tsx`                  |
+| 7   | `ToastContent` renders title/subtitle/icon/role                   | `toast/__tests__/content.test.tsx`                 |
+| 8   | `usePrefersReducedMotion` reflects matchMedia                     | `lib/__tests__/use-prefers-reduced-motion.test.ts` |
+| 9   | reduced-motion → animation not applied                            | `toast/__tests__/motion.test.tsx`                  |
+| 10  | jest-axe: no violations (page + ToastContent)                     | `**/__tests__/a11y.test.tsx`                       |
+| 11  | keyboard: Tab focuses button, Enter increments                    | `counter/__tests__/keyboard.test.tsx`              |
+| 12  | milestone flag at multiples of 10, off otherwise + reduced-motion | `toast/__tests__/milestone.test.tsx`               |
 
 ---
 
