@@ -1,11 +1,13 @@
 "use client";
 
 import { useCounter } from "./use-counter";
+import { useCounterToast } from "@/toast/use-counter-toast";
 import { formatCount } from "@/lib/format";
 import styles from "./Counter.module.css";
 
 export function Counter() {
   const { count, increment } = useCounter();
+  useCounterToast(count);
 
   // The toast is the single, intentional screen-reader announcement for count
   // changes, so the on-page value is a plain <span> (not an aria-live region),
