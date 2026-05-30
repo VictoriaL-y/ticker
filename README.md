@@ -89,7 +89,6 @@ Deliberate next steps, scoped out to keep each PR small — tracked as issues, n
 - [#5](https://github.com/VictoriaL-y/ticker/issues/5) — accessibility pass (focus-visible polish, `axe`, keyboard, reconciling the nested live-region)
 - [#6](https://github.com/VictoriaL-y/ticker/issues/6) — edge-case tests (spam, large numbers, auto-dismiss) and the sustained-click timer-reset
 - [#7](https://github.com/VictoriaL-y/ticker/issues/7) — a subtle milestone flourish every tenth count
-- [#8](https://github.com/VictoriaL-y/ticker/issues/8) — deploy to Netlify and add the live link + badge
 - [#10](https://github.com/VictoriaL-y/ticker/issues/10) · [#11](https://github.com/VictoriaL-y/ticker/issues/11) — the two pre-existing SSR/console issues found during verification, each with a root cause and a proposed fix
 
 ## Where things live
